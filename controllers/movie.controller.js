@@ -1,3 +1,4 @@
+const { response } = require("express");
 const Movie = require("../models/movie.model.js")
 const movieService = require("../services/movie.service.js");
 const { errorResponseBody, successResponseBody } = require("../utils/responseBody.js");
@@ -5,6 +6,12 @@ const { errorResponseBody, successResponseBody } = require("../utils/responseBod
 const createMovie = async (req, res) => {
     try {
         const movie = await movieService.createMovie(req.body);
+        if (movie.err) {
+            errorResponseBody.err = movie.err;
+            errorResponseBody.code = movie.code;
+            errorResponseBody.message = "Validation Failed on few parameters of the request body"
+            return res.status(movie.code).json(errorResponseBody)
+        }
         successResponseBody.message = "Successfully created a new movie";
         successResponseBody.data = movie;
         return res.status(201).json(successResponseBody)
