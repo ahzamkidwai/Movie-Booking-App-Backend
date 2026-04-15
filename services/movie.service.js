@@ -8,10 +8,10 @@ const createMovie = async (data) => {
         if (error.name === 'ValidationError') {
             let err = {};
             Object.keys(error.errors).forEach((key) => {
-                err[key] = error.error[key].message;
+                err[key] = error.errors[key].message;
             });
             console.log("Error in creating Movie : ", err);
-            return {err: err, code: 422}
+            return { err: err, code: 422 }
         }
     }
 }
@@ -28,11 +28,27 @@ const getMovieById = async (id) => {
         return {
             err: "No Movie found for the corresponding id provided",
             code: 404,
-            // message:"Something went wrong, unable to fetch movie",
-            // data:{}
         }
     }
     return movie;
 }
 
-module.exports = { createMovie, deleteMovie, getMovieById }
+const updateMovie = async (id, data) => {
+    try {
+        const movie = await Movie.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+        return movie;
+    } catch (error) {
+        console.log("Error inside update Movie services : ", error)
+        if (error.name.includes('ValidationError') || error._message === 'Validation Failed') {
+            console.log("Hello Ji Ji Ji")
+            let err = {};
+            Object.keys(error.errors).forEach((key) => {
+                err[key] = error.errors[key].message;
+            });
+            console.log("Error in creating Movie : ", err);
+            return { err: err, code: 422 }
+        }
+    }
+}
+
+module.exports = { createMovie, deleteMovie, getMovieById, updateMovie }
