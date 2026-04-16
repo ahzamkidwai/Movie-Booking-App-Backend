@@ -69,4 +69,20 @@ const updateMovie = async (req, res) => {
     }
 }
 
-module.exports = { createMovie, deleteMovie, getMovie, updateMovie }
+const getMovies = async (req, res) => {
+    try {
+        const response = await movieService.fetchMovies(req.query)
+        if (response.err) {
+            errorResponseBody.err = response.err;
+            return res.status(response.code).json(errorResponseBody)
+        }
+        successResponseBody.data = response;
+        return res.status(200).json(successResponseBody)
+    } catch (error) {
+        console.log("Error occurred while fetching movies by query: ", error);
+        errorResponseBody.err = error;
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
+module.exports = { createMovie, deleteMovie, getMovie, updateMovie, getMovies }
