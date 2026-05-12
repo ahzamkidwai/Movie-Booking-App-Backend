@@ -19,11 +19,8 @@ const createTheatre = async (req, res) => {
 }
 
 const getTheatres = async (req, res) => {
-    console.log("Hi")
     try {
-        console.log("inside trye block")
         const response = await theatreService.fetchTheatres();
-        console.log("Response in getTheatres : ", response)
         successResponseBody.data = response;
         successResponseBody.message = 'Successfully fetched the theatre';
         return res.status(201).json(successResponseBody);
@@ -35,4 +32,22 @@ const getTheatres = async (req, res) => {
     }
 }
 
-module.exports = { createTheatre, getTheatres };
+const deleteTheatre = async (req, res) => {
+    try {
+        const response = await theatreService.deleteTheatreById(req.params.id);
+        if(response.err) {
+            errorResponseBody.err = response.err;
+            errorResponseBody.code = response.code;
+            return res.status(response.code).json(errorResponseBody)
+        }
+        successResponseBody.data = response;
+        successResponseBody.message = 'Successfully deleted the theatre';
+        return res.status(201).json(successResponseBody);
+    } catch (error) {
+        console.log("Error occurred while deleting the theatre : ", error);
+        errorResponseBody.message = error.message;
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
+module.exports = { createTheatre, getTheatres, deleteTheatre };
