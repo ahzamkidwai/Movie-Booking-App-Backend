@@ -53,13 +53,11 @@ const updateMovie = async (id, data) => {
 
 const fetchMovies = async (filter) => {
     let query = {};
-    if (filter.name) {
-        query.name = filter.name;
+    if (filter && filter.name) {
+        query.name = { $regex: filter.name, $options: "i" };
     }
-    let movies = await Movie.find({
-        name: { $regex: query.name, $options: "i" }
-    });
-    if (!movies) {
+    const movies = await Movie.find(query);
+    if (!movies || movies.length === 0) {
         return {
             err: "Not able to find the queries movies.",
             code: 404
