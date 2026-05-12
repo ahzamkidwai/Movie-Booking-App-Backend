@@ -22,4 +22,13 @@ const fetchTheatres = async () => {
     return theatres;
 }
 
-module.exports = { createNewTheatre, fetchTheatres }
+const deleteTheatreById = async (id) => { 
+    try {
+        const response = await Theatre.findByIdAndDelete(id);
+        return response;
+    } catch (error) {
+        return { err: error.message, code: 400 }
+    }
+}
+
+module.exports = { createNewTheatre, fetchTheatres, deleteTheatreById }
