@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const connectMongoDB = require('./config/db.js');
 const Movie = require('./models/movie.model.js');
 const MovieRoutes = require("./routes/movie.routes.js")
+const TheatreRoutes = require("./routes/theatre.routes.js")
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.get("/", (req, res) => {
 })
 
 MovieRoutes(app);
+TheatreRoutes(app);
+
 
 app.get("/home", (req, res) => {
     return res.json({

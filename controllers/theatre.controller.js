@@ -1,0 +1,38 @@
+const theatreService = require('../services/theatre.service.js');
+const { successResponseBody, errorResponseBody} = require("../utils/responseBody");
+
+const createTheatre = async (req, res) => {
+    try {
+        const response = await theatreService.createNewTheatre(req.body);
+        if(response.err) {
+            errorResponseBody.err = response.err;
+            errorResponseBody.code = response.code;
+            return res.status(response.code).json(errorResponseBody)
+        }
+        successResponseBody.data = response;
+        successResponseBody.message = 'Successfully created the theatre';
+        return res.status(201).json(successResponseBody);
+    } catch (error) {
+        errorResponseBody.err = error;
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
+const getTheatres = async (req, res) => {
+    console.log("Hi")
+    try {
+        console.log("inside trye block")
+        const response = await theatreService.fetchTheatres();
+        console.log("Response in getTheatres : ", response)
+        successResponseBody.data = response;
+        successResponseBody.message = 'Successfully fetched the theatre';
+        return res.status(201).json(successResponseBody);
+    } catch (error) { 
+        console.log("Error occurred while fetching all theatres : ", error)
+        console.log("Error occurred : ", error.message)
+        errorResponseBody.err = error;
+        return res.status(500).json(errorResponseBody);
+    }
+}
+
+module.exports = { createTheatre, getTheatres };
