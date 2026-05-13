@@ -50,4 +50,23 @@ const deleteTheatre = async (req, res) => {
     }
 }
 
-module.exports = { createTheatre, getTheatres, deleteTheatre };
+const getTheatreById = async (req, res) => {
+    try {
+        const response = await theatreService.fetchTheatreById(req.params.id);
+        if(response.err) {
+            errorResponseBody.err = response.err;
+            errorResponseBody.code = response.code;
+            return res.status(response.code).json(errorResponseBody)
+        }
+        console.log("Response after fetching from getTheatreById : ", response)
+        successResponseBody.data = response;
+        successResponseBody.message = response.message || 'Successfully fetched the theatre ID';
+        return res.status(201).json(successResponseBody);
+    } catch (error) {
+        console.log("Error occurred while fetching theatre by ID : ", error);
+        errorResponseBody.message = error.message;
+        return res.status(500).json(errorResponseBody)
+    }
+}
+
+module.exports = { createTheatre, getTheatres, deleteTheatre, getTheatreById };

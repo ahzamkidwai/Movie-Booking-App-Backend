@@ -31,4 +31,15 @@ const deleteTheatreById = async (id) => {
     }
 }
 
-module.exports = { createNewTheatre, fetchTheatres, deleteTheatreById }
+const fetchTheatreById = async (id) => {
+    const theatre = await Theatre.findById(id);
+    if (!theatre) {
+        return {
+            message : "No such theatre exists",
+            code : 404
+        }
+    }
+    return theatre;
+}
+
+module.exports = { createNewTheatre, fetchTheatres, deleteTheatreById, fetchTheatreById }
