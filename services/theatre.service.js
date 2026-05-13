@@ -25,10 +25,27 @@ const fetchTheatres = async () => {
 const deleteTheatreById = async (id) => { 
     try {
         const response = await Theatre.findByIdAndDelete(id);
+        if (!response) {
+            return {
+                err: "No record with this ID found. Cannot delete this.",
+                code: 404
+            }
+        }
         return response;
     } catch (error) {
         return { err: error.message, code: 400 }
     }
 }
 
-module.exports = { createNewTheatre, fetchTheatres, deleteTheatreById }
+const fetchTheatreById = async (id) => {
+    const theatre = await Theatre.findById(id);
+    if (!theatre) {
+        return {
+            message : "No such theatre exists",
+            code : 404
+        }
+    }
+    return theatre;
+}
+
+module.exports = { createNewTheatre, fetchTheatres, deleteTheatreById, fetchTheatreById }
