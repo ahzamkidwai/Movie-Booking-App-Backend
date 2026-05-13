@@ -58,7 +58,6 @@ const getTheatreById = async (req, res) => {
             errorResponseBody.code = response.code;
             return res.status(response.code).json(errorResponseBody)
         }
-        console.log("Response after fetching from getTheatreById : ", response)
         successResponseBody.data = response;
         successResponseBody.message = response.message || 'Successfully fetched the theatre ID';
         return res.status(201).json(successResponseBody);

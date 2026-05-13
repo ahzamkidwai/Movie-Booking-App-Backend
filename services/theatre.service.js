@@ -25,6 +25,12 @@ const fetchTheatres = async () => {
 const deleteTheatreById = async (id) => { 
     try {
         const response = await Theatre.findByIdAndDelete(id);
+        if (!response) {
+            return {
+                err: "No record with this ID found. Cannot delete this.",
+                code: 404
+            }
+        }
         return response;
     } catch (error) {
         return { err: error.message, code: 400 }
